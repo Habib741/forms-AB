@@ -1,3 +1,5 @@
+import { createClient } from "@supabase/supabase-js";
+
 type MessagePayload = {
   phone: string;
   message: string;
@@ -34,49 +36,37 @@ export async function POST(request: Request) {
     );
   }
 
-  const scriptUrl = process.env.GOOGLE_APPS_SCRIPT_URL;
-  if (!scriptUrl) {
+  const supabaseUrl = process.env.SUPABASE_URL?.replace(/\/+$/, "");
+  const supabaseSecretKey = process.env.SUPABASE_SECRET_KEY;
+  if (!supabaseUrl || !supabaseSecretKey) {
     return Response.json(
-      { error: "Le formulaire n’est pas encore connecté à son tableau de réponses." },
+      { error: "Le formulaire n’est pas encore connecté à sa base de données." },
       { status: 503 },
     );
   }
 
-  let response: Response;
   try {
-    response = await fetch(scriptUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-      cache: "no-store",
+    const supabase = createClient(supabaseUrl, supabaseSecretKey, {
+      auth: {
+        autoRefreshToken: false,
+        detectSessionInUrl: false,
+        persistSession: false,
+      },
     });
+    const { error } = await supabase.from("messages").insert({
+      phone: payload.phone.trim() || null,
+      message: payload.message.trim(),
+    });
+
+    if (error) {
+      return Response.json(
+        { error: "Le message n’a pas pu être enregistré. Réessaie dans un instant." },
+        { status: 502 },
+      );
+    }
   } catch {
     return Response.json(
       { error: "Le service de réponses est momentanément inaccessible. Réessaie plus tard." },
-      { status: 502 },
-    );
-  }
-
-  if (!response.ok) {
-    return Response.json(
-      { error: "Le message n’a pas pu être enregistré. Réessaie dans un instant." },
-      { status: 502 },
-    );
-  }
-
-  let result: unknown;
-  try {
-    result = await response.json();
-  } catch {
-    return Response.json(
-      { error: "Le service de réponses a renvoyé une réponse invalide." },
-      { status: 502 },
-    );
-  }
-
-  if (typeof result !== "object" || result === null || !("ok" in result) || result.ok !== true) {
-    return Response.json(
-      { error: "Le message n’a pas pu être enregistré. Réessaie dans un instant." },
       { status: 502 },
     );
   }
