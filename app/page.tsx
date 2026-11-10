@@ -35,9 +35,6 @@ export default function Home() {
           <MessageForm />
         </section>
 
-        <footer className="page-footer">
-          Merci de prendre le temps d’écrire.
-        </footer>
       </div>
     </main>
   );

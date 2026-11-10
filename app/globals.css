@@ -13,12 +13,16 @@
 
 html {
   min-height: 100%;
+  background: var(--background);
 }
 
 body {
   min-height: 100vh;
+  min-height: 100svh;
   margin: 0;
-  background: var(--background);
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(135, 59, 209, 0.07), transparent 34rem),
+    var(--background);
   color: var(--foreground);
   font-family: var(--font-dm-sans), Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -34,8 +38,9 @@ textarea {
 .page-shell {
   display: flex;
   min-height: 100vh;
+  min-height: 100svh;
   justify-content: center;
-  padding: 38px 20px 24px;
+  padding: max(24px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom));
 }
 
 .content-wrap {
@@ -73,7 +78,8 @@ textarea {
 
 .form-section {
   width: 100%;
-  margin-top: 64px;
+  margin-block: auto;
+  padding-block: clamp(40px, 8vh, 76px);
 }
 
 .intro {
@@ -98,11 +104,11 @@ textarea {
 }
 
 .form-card {
-  padding: 28px;
+  padding: clamp(20px, 5vw, 28px);
   border: 1px solid rgba(57, 45, 93, 0.08);
-  border-radius: 14px;
+  border-radius: 16px;
   background: #fff;
-  box-shadow: 0 12px 36px rgba(48, 37, 83, 0.07);
+  box-shadow: 0 16px 42px rgba(48, 37, 83, 0.08);
 }
 
 .message-form {
@@ -126,6 +132,7 @@ textarea {
 .field-group input,
 .field-group textarea {
   width: 100%;
+  min-width: 0;
   border: 1px solid var(--border);
   border-radius: 8px;
   outline: none;
@@ -240,21 +247,6 @@ textarea {
   color: #a33b37;
 }
 
-.form-note {
-  margin: 18px 0 0;
-  color: var(--muted);
-  font-size: 12px;
-  text-align: center;
-}
-
-.page-footer {
-  margin-top: auto;
-  padding-top: 48px;
-  color: #9996a6;
-  font-size: 11px;
-  text-align: center;
-}
-
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -263,24 +255,45 @@ textarea {
 
 @media (max-width: 520px) {
   .page-shell {
-    padding: 28px 16px 22px;
+    padding-right: max(16px, env(safe-area-inset-right));
+    padding-left: max(16px, env(safe-area-inset-left));
   }
 
-  .form-section {
-    margin-top: 54px;
+  .content-wrap {
+    max-width: 440px;
   }
 
   .intro {
-    margin-bottom: 23px;
+    margin-bottom: 24px;
+  }
+
+  .intro h1 {
+    font-size: clamp(28px, 8vw, 36px);
   }
 
   .intro-copy {
-    font-size: 13px;
+    max-width: 32ch;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 360px) {
+  .page-shell {
+    padding-right: max(12px, env(safe-area-inset-right));
+    padding-left: max(12px, env(safe-area-inset-left));
+  }
+
+  .form-section {
+    padding-block: 36px;
   }
 
   .form-card {
-    padding: 22px 18px;
+    padding: 18px 14px;
     border-radius: 12px;
+  }
+
+  .message-form {
+    gap: 18px;
   }
 }
 

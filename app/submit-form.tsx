@@ -119,7 +119,6 @@ export default function MessageForm() {
         </div>
       </form>
 
-      <p className="form-note">Ton numéro est facultatif. Ton message reste privé.</p>
     </div>
   );
 }
