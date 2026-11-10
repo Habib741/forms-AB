@@ -1,7 +1,6 @@
 # Le petit mot
 
-Un formulaire pour envoyer un message et, si tu le souhaites, laisser un numéro
-de téléphone afin de pouvoir être recontacté.
+Un formulaire pour envoyer un message et, si tu le souhaites, laisser ton
+prénom, ton nom et un numéro de téléphone pour pouvoir être recontacté.
 
-Le numéro de téléphone est facultatif. Le message est nécessaire pour envoyer
-le formulaire.
+Seul le message est nécessaire pour envoyer le formulaire.

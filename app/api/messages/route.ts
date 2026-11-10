@@ -1,6 +1,8 @@
 import { createClient } from "@supabase/supabase-js";
 
 type MessagePayload = {
+  first_name: string;
+  last_name: string;
   phone: string;
   message: string;
 };
@@ -11,6 +13,12 @@ function isMessagePayload(value: unknown): value is MessagePayload {
   }
 
   return (
+    "first_name" in value &&
+    typeof value.first_name === "string" &&
+    value.first_name.length <= 80 &&
+    "last_name" in value &&
+    typeof value.last_name === "string" &&
+    value.last_name.length <= 80 &&
     "phone" in value &&
     typeof value.phone === "string" &&
     value.phone.length <= 40 &&
@@ -54,6 +62,8 @@ export async function POST(request: Request) {
       },
     });
     const { error } = await supabase.from("messages").insert({
+      first_name: payload.first_name.trim() || null,
+      last_name: payload.last_name.trim() || null,
       phone: payload.phone.trim() || null,
       message: payload.message.trim(),
     });

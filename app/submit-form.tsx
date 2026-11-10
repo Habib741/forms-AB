@@ -18,6 +18,8 @@ export default function MessageForm() {
     const form = event.currentTarget;
     const formData = new FormData(form);
     const payload = {
+      first_name: String(formData.get("first_name") ?? "").trim(),
+      last_name: String(formData.get("last_name") ?? "").trim(),
       phone: String(formData.get("phone") ?? "").trim(),
       message: String(formData.get("message") ?? "").trim(),
     };
@@ -55,6 +57,30 @@ export default function MessageForm() {
   return (
     <div className="form-card">
       <form className="message-form" onSubmit={handleSubmit}>
+        <div className="field-group">
+          <label htmlFor="first_name">Prénom</label>
+          <input
+            id="first_name"
+            name="first_name"
+            type="text"
+            autoComplete="given-name"
+            maxLength={80}
+            placeholder="Ton prénom"
+          />
+        </div>
+
+        <div className="field-group">
+          <label htmlFor="last_name">Nom</label>
+          <input
+            id="last_name"
+            name="last_name"
+            type="text"
+            autoComplete="family-name"
+            maxLength={80}
+            placeholder="Ton nom"
+          />
+        </div>
+
         <div className="field-group">
           <label htmlFor="phone">Numéro de téléphone (facultatif)</label>
           <input
